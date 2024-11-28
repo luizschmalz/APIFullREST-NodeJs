@@ -1,14 +1,9 @@
-import express, {Request, Response} from 'express'
+import express from 'express'
+import {routes} from './routes/index'
 
 const app = express()
 
-app.get('/', (req: Request, res:Response) => {
-    res.send('Hello World')
-})
-
-app.get('/users', (req: Request, res: Response) => {
-    res.send('endoint de users')
-})
+routes(app)
 
 app.listen(3000, () => {
     console.log('Server on port 3000')
