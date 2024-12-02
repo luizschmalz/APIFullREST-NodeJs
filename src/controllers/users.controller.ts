@@ -1,13 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import {getFirestore} from 'firebase-admin/firestore'
-import { ValidationError } from '../errors/validation.error';
 import { NotFoundError } from '../errors/not-found.error';
-
-type User = {
-    id: number;
-    name: string;
-    email: string
-}
+import { User } from '../models/user.model';
 
 
 export class UserController{
@@ -40,9 +34,7 @@ export class UserController{
     static async createUser(req: Request, res: Response, next: NextFunction) {
 
         let user = req.body
-        if (!user.name || !user.email) {
-            throw new ValidationError('Name and E-mail are required')
-        }
+        
         const newUser = await getFirestore().collection('users').add(user)
         res.status(201).send({
             message: `User ${newUser.id} created`,
