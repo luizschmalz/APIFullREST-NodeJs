@@ -1,53 +1,49 @@
-import { getFirestore } from "firebase-admin/firestore";
 import { User } from "../models/user.model";
 import { NotFoundError } from "../errors/not-found.error";
+import { UserRepository } from "../repositories/user.repositories";
 
 export class UserService {
 
+    private userRepository: UserRepository;
+
+    constructor(){
+        this.userRepository = new UserRepository();
+    }
+
     async getAll(): Promise<User[]>{
-        const snapshot = await getFirestore().collection('users').get()
-        return snapshot.docs.map(doc => {
-        return {
-            id: doc.id,
-            ...doc.data()
-        }}) as User[];
+        return this.userRepository.getAll();
     }
 
     async getById(userId: string) : Promise<User>{
-        const doc = await getFirestore().collection("users").doc(userId).get();
-        if (doc.exists) {
-            return ({
-                id: doc.id,
-                ...doc.data()
-            }) as User;
-        }else{
+        const user = await this.userRepository.getById(userId)
+        if(!user){
             throw new NotFoundError('User not found')
         }
-       
+
+        return user
     }
 
     async createUser(user: User) : Promise<void>{
         
-        await getFirestore().collection('users').add(user)
-
+        this.userRepository.createUser(user)
     }
 
     async updateUser(userId: string, user: User) : Promise<void>{
 
-        let docRef = getFirestore().collection('users').doc(userId)
-
-        if ((await docRef.get()).exists) {
-            await docRef.set({
-                name: user.name,
-                email: user.email
-            })
-        }else{
+        const _user = await this.userRepository.getById(userId)
+        if(!_user){
             throw new NotFoundError('User not found')
         }
+        
+        _user.name = user.name  
+        _user.email = user.email
+
+        this.userRepository.updateUser(_user)
+       
     }
 
     async deleteUser(userId:string): Promise<void>{
-        await getFirestore().collection('users').doc(userId).delete()
+        this.userRepository.deleteUser(userId)
     }
 
 }
