@@ -1,21 +1,54 @@
+import { FirebaseError } from "firebase/app";
 import { EmailAlreadyExistsError } from "../errors/email-alredy-exists.errors";
+import { UnauthorizedError } from "../errors/unauthorized.error";
 import { User } from "../models/user.model";
-import {getAuth, UserRecord} from 'firebase-admin/auth'
+import {FirebaseAuthError, getAuth, UpdateRequest, UserRecord} from 'firebase-admin/auth'
+import {signInWithEmailAndPassword, getAuth as getFirebaseAuth, UserCredential, sendPasswordResetEmail} from 'firebase/auth'
 
 export class AuthService {
     
-    create(user: User): Promise<UserRecord>{
+    async create(user: User): Promise<UserRecord>{
         return getAuth().createUser({
             email: user.email,
             password: user.password,
             displayName: user.name,
         }).catch(err => {
-            if(err.code === 'auth/email-already-exists'){
+            if(err instanceof FirebaseAuthError && err.code === 'auth/email-already-exists'){
                 throw new EmailAlreadyExistsError()
             }
             throw err
         })
     }
 
+    async update(id:string, user: User){
+        const props: UpdateRequest = {
+            displayName: user.name,
+            email: user.email
+        }
 
+        if(user.password){
+            props.password = user.password
+        }
+
+        await getAuth().updateUser(id, props)
+    }
+
+    async delete(id:string){
+        getAuth().deleteUser(id)
+    }
+
+    async login(email:string, password:string): Promise<UserCredential>{
+        return await signInWithEmailAndPassword(getFirebaseAuth(), email, password)
+        .catch(err => {
+            if(err instanceof FirebaseError && err.code === 'auth/invalid-credential'){
+                throw new UnauthorizedError()
+            }
+            throw err
+        })
+    }
+
+    async recovery(email: string){
+        await sendPasswordResetEmail(getFirebaseAuth(), email)
+    }
 }
+

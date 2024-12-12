@@ -42,12 +42,14 @@ export class UserService {
         _user.name = user.name  
         _user.email = user.email
 
-        this.userRepository.updateUser(_user)
+        await this.authService.update(userId, user)
+        await this.userRepository.updateUser(_user)
        
     }
 
     async deleteUser(userId:string): Promise<void>{
-        this.userRepository.deleteUser(userId)
+        await this.authService.delete(userId)
+        await this.userRepository.deleteUser(userId)
     }
 
 }
