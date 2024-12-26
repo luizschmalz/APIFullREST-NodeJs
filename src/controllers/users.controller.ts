@@ -1,19 +1,19 @@
-import { NextFunction, Request, Response } from 'express';
+import { Request, Response } from 'express';
 import { UserService } from '../service/user.service';
 
 
 export class UserController{
-    static async getAll(req: Request, res: Response, next: NextFunction) {
+    static async getAll(req: Request, res: Response) {
         res.send(await new UserService().getAll())
     }
 
-    static async getById(req: Request, res: Response, next: NextFunction) {
+    static async getById(req: Request, res: Response) {
         
         let userId = req.params.id
         res.send(await new UserService().getById(userId))
     }
 
-    static async createUser(req: Request, res: Response, next: NextFunction) {
+    static async createUser(req: Request, res: Response) {
 
         await new UserService().createUser(req.body)
         res.status(201).send({
@@ -22,7 +22,7 @@ export class UserController{
         
     }
 
-    static async deleteUser(req: Request, res: Response, next: NextFunction) {
+    static async deleteUser(req: Request, res: Response) {
 
         let userId = req.params.id
         await new UserService().deleteUser(userId)
@@ -30,7 +30,7 @@ export class UserController{
 
     }
 
-    static async updateUser(req: Request, res: Response, next: NextFunction) {
+    static async updateUser(req: Request, res: Response) {
         
         let userId = req.params.id
         let user = req.body
