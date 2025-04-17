@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { Company } from '../models/company.model';
-import { CompanyService } from '../service/company.service';
+import { Company } from '../models/company.model.js';
+import { CompanyService } from '../service/company.service.js';
 
 
 export class CompaniesController{

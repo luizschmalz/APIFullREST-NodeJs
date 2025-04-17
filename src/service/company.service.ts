@@ -1,13 +1,17 @@
-import { Company } from "../models/company.model";
-import { NotFoundError } from "../errors/not-found.error";
-import { CompanyRepository } from "../repositories/company.repositories";
+import { Company } from "../models/company.model.js";
+import { NotFoundError } from "../errors/not-found.error.js";
+import { CompanyRepository } from "../repositories/company.repositories.js";
+import { UploadFileService } from "./upload-file.service.js";
+import { ValidationError } from "../errors/validation.error.js";
 
 export class CompanyService {
 
     private companyRepository : CompanyRepository;
+    private uploadFileService : UploadFileService;
 
     constructor(){
         this.companyRepository = new CompanyRepository();
+        this.uploadFileService = new UploadFileService("images/companies");
     }
 
     async getAll(): Promise<Company[]>{
@@ -24,6 +28,8 @@ export class CompanyService {
     }
 
     async createCompany(company: Company) : Promise<void>{
+        const logomarcaUrl = await this.uploadFileService.upload(company.logomarca)
+        company.logomarca = logomarcaUrl
         this.companyRepository.createCompany(company)
     }
 
@@ -34,7 +40,10 @@ export class CompanyService {
             throw new NotFoundError('Company not found')
         }
         
-        _company.logomarca = company.logomarca;
+        if (!this.isValidUrl(company.logomarca)) {
+            _company.logomarca = await this.uploadFileService.upload(company.logomarca)
+        }
+
         _company.cpfCnpj = company.cpfCnpj;
         _company.razaoSocial = company.razaoSocial;
         _company.nomeFantasia = company.nomeFantasia;
@@ -49,4 +58,20 @@ export class CompanyService {
        
     }
 
+    private isValidUrl(urlStr: string): boolean {
+        try {
+            const url = new URL(urlStr);
+            console.log(url.host)
+            if (url.host !== "firebasestorage.googleapis.com") {
+                console.log("aqui")
+                throw new ValidationError("Invalid URL");
+            }
+            return true;
+        } catch (error) {
+            if (error instanceof ValidationError) {
+                throw error 
+            }
+            return false;  
+        }
+    }
 }

@@ -1,11 +1,12 @@
 import express from 'express'
 import { initializeApp } from 'firebase-admin/app';
 import { initializeApp as initializeFirebaseApp} from 'firebase/app'
-import {routes} from './routes/index'
-import { errorHandler } from './middlewares/error-handler.middleware';
-import { pageNotFound } from './middlewares/page-not-found.middleware';
-import { auth } from './middlewares/auth.middleware';
-require('dotenv').config();
+import {routes} from './routes/index.js'
+import { errorHandler } from './middlewares/error-handler.middleware.js';
+import { pageNotFound } from './middlewares/page-not-found.middleware.js';
+import { auth } from './middlewares/auth.middleware.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
 initializeApp();
 initializeFirebaseApp({

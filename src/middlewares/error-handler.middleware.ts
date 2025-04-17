@@ -1,7 +1,7 @@
 import express, {Request, Response, NextFunction} from 'express'
-import { InternalServerError } from '../errors/internal-server.error'
+import { InternalServerError } from '../errors/internal-server.error.js'
 import { errors } from 'celebrate'
-import { BaseError } from '../errors/base.error'
+import { BaseError } from '../errors/base.error.js'
 
 export const errorHandler = (app: express.Express) => {
     app.use(errors())
