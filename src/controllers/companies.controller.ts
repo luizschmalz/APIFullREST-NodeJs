@@ -14,7 +14,7 @@ export class CompaniesController{
         res.send(await new CompanyService().getById(companyId))
     }
 
-    static async createUser(req: Request, res: Response) {
+    static async createCompany(req: Request, res: Response) {
 
         await new CompanyService().createCompany(req.body)
         res.status(201).send({
@@ -24,7 +24,7 @@ export class CompaniesController{
     }
 
 
-    static async updateUser(req: Request, res: Response) {
+    static async updateCompany(req: Request, res: Response) {
         
         let companyId = req.params.id
         let company = req.body as Company

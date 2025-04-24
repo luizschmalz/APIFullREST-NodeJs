@@ -8,5 +8,5 @@ export const companyRoutes = express.Router()
 
 companyRoutes.get('/companies', asyncHandler(CompaniesController.getAll))
 companyRoutes.get('/companies/:id', asyncHandler(CompaniesController.getById))
-companyRoutes.post('/companies', celebrate({[Segments.BODY]: newCompanySchema}), asyncHandler(CompaniesController.createUser))
-companyRoutes.put('/companies/:id', celebrate({[Segments.BODY]: updateCompanySchema}), asyncHandler(CompaniesController.updateUser))
+companyRoutes.post('/companies', celebrate({[Segments.BODY]: newCompanySchema}), asyncHandler(CompaniesController.createCompany))
+companyRoutes.put('/companies/:id', celebrate({[Segments.BODY]: updateCompanySchema}), asyncHandler(CompaniesController.updateCompany))
