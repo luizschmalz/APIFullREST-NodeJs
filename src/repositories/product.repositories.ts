@@ -38,7 +38,21 @@ export class  ProductRepository{
         }else{
             return null
         }
-       
+    }
+
+    async search(categoriaId: string) : Promise<Product[]>{
+        const snapshot = await this.collection.where('categoria.id', '==', categoriaId).get()
+        return snapshot.docs.map(doc => {
+            return {
+                id: doc.id,
+                nome: doc.data().nome,
+                preco: doc.data().preco,
+                descricao: doc.data().descricao,
+                imagem: doc.data().imagem,
+                categoria: doc.data().categoria,
+                ativa: doc.data().ativa
+            }}) as Product[];
+        
     }
 
     async createProduct(product: Product): Promise<void> {
@@ -54,5 +68,10 @@ export class  ProductRepository{
 
     async deleteProduct(productId: string): Promise<void> {
         await this.collection.doc(productId).delete()
+    }
+
+    async getCountByCategory(categoryId: string): Promise<number> {
+        const countSnapshot = await this.collection.where('categoria.id', '==', categoryId).count().get()
+        return countSnapshot.data().count
     }
 }

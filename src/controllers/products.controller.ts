@@ -14,6 +14,11 @@ export class ProductsController{
         res.send(await new ProductService().getById(productId))
     }
 
+    static async search(req: Request, res: Response) {
+        let categoriaId = req.query.categoriaId as string
+        res.send(await new ProductService().search(categoriaId))
+    }
+
     static async createProduct(req: Request, res: Response) {
 
         await new ProductService().createProduct(req.body)

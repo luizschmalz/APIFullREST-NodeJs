@@ -1,13 +1,17 @@
 import { Category } from "../models/categories.model.js";
 import { NotFoundError } from "../errors/not-found.error.js";
 import { CategoryRepository } from "../repositories/categories.repositories.js";
+import { ProductRepository } from "../repositories/product.repositories.js";
+import { ValidationError } from "../errors/validation.error.js";
 
 export class CategoryService {
 
     private categoryRepository : CategoryRepository;
+    private productRepository: ProductRepository;
 
     constructor(){
         this.categoryRepository = new CategoryRepository();
+        this.productRepository = new ProductRepository();
     }
 
     async getAll(): Promise<Category[]>{
@@ -43,11 +47,9 @@ export class CategoryService {
     }
 
     async deleteCategory(categoryId: string) : Promise<void>{
-        const category = await this.categoryRepository.getById(categoryId)
-        if(!category){
-            throw new NotFoundError('Category not found')
+        if(await this.productRepository.getCountByCategory(categoryId) > 0){
+            throw new ValidationError('Category has products associated')
         }
-
         await this.categoryRepository.deleteCategory(categoryId)
     }
 }

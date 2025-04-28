@@ -30,6 +30,10 @@ export class ProductService {
         return product
     }
 
+    async search(categoriaId: string) : Promise<Product[]>{
+        return this.productRepository.search(categoriaId)
+    }
+
     async createProduct(product: Product) : Promise<void>{
         if (!product.categoria?.id) {
             throw new Error('Category ID is required');
