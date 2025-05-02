@@ -20,6 +20,14 @@ export class OrderRepository{
            query= query.where("empresa.id", "==", queryParams.empresaId)
         }
 
+        if(queryParams.dataInicio){
+            query = query.where("data", ">=", queryParams.dataInicio)
+        }
+        
+        if(queryParams.dataFim){
+            query = query.where("data", "<=", queryParams.dataFim)
+        }
+        
         if(queryParams.status){
             query = query.where("status", "==", queryParams.status)
         }
