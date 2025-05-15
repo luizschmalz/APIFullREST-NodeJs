@@ -8,7 +8,8 @@
     "noImplicitReturns": true,
     "noEmitOnError": true,
     "strictNullChecks": true,
-    "noUnusedLocals": true
+    "noUnusedLocals": true,
+    "allowSyntheticDefaultImports": true
   },
   "compileOnSave": true,
   "include": ["src/**/*"],
