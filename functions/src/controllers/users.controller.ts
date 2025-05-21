@@ -9,7 +9,7 @@ export class UserController{
 
     static async getById(req: Request, res: Response) {
         
-        let userId = req.params.id
+        const userId = req.params.id
         res.send(await new UserService().getById(userId))
     }
 
@@ -24,7 +24,7 @@ export class UserController{
 
     static async deleteUser(req: Request, res: Response) {
 
-        let userId = req.params.id
+        const userId = req.params.id
         await new UserService().deleteUser(userId)
         res.status(204).end()
 
@@ -32,8 +32,8 @@ export class UserController{
 
     static async updateUser(req: Request, res: Response) {
         
-        let userId = req.params.id
-        let user = req.body
+        const userId = req.params.id
+        const user = req.body
         await new UserService().updateUser(userId, user)
 
         res.send({message: "User updated"})

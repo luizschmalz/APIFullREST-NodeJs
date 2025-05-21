@@ -10,7 +10,7 @@ export class PaymentsController{
 
     static async getById(req: Request, res: Response) {
         
-        let paymentId = req.params.id
+        const paymentId = req.params.id
         res.send(await new PaymentService().getById(paymentId))
     }
 
@@ -26,8 +26,8 @@ export class PaymentsController{
 
     static async updatePayment(req: Request, res: Response) {
         
-        let paymentId = req.params.id
-        let payment = req.body as PaymentMethod
+        const paymentId = req.params.id
+        const payment = req.body as PaymentMethod
         await new PaymentService().updatePayment(paymentId, payment)
 
         res.send({message: "Payment updated"})
@@ -35,7 +35,7 @@ export class PaymentsController{
     }
 
     static async deletePayment(req: Request, res: Response) {
-        let paymentId = req.params.id
+        const paymentId = req.params.id
         await new PaymentService().deletePayment(paymentId)
         res.send({message: "Payment deleted"})
     }

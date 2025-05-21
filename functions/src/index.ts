@@ -5,6 +5,7 @@ import {routes} from './routes/index.js'
 import { errorHandler } from './middlewares/error-handler.middleware.js';
 import { pageNotFound } from './middlewares/page-not-found.middleware.js';
 import { auth } from './middlewares/auth.middleware.js';
+import { onRequest } from 'firebase-functions/v2/https';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -19,7 +20,5 @@ routes(app);
 pageNotFound(app);
 errorHandler(app);
 
-app.listen(3000, () => {
-    console.log('Server on port 3000');
-})
+export const api = onRequest(app)
 

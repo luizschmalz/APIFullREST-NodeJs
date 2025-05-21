@@ -10,12 +10,12 @@ export class ProductsController{
 
     static async getById(req: Request, res: Response) {
         
-        let productId = req.params.id
+        const productId = req.params.id
         res.send(await new ProductService().getById(productId))
     }
 
     static async search(req: Request, res: Response) {
-        let categoriaId = req.query.categoriaId as string
+        const categoriaId = req.query.categoriaId as string
         res.send(await new ProductService().search(categoriaId))
     }
 
@@ -30,8 +30,8 @@ export class ProductsController{
 
     static async updateProduct(req: Request, res: Response) {
         
-        let productId = req.params.id
-        let product = req.body as Product
+        const productId = req.params.id
+        const product = req.body as Product
         await new ProductService().updateProduct(productId, product)
 
         res.send({message: "Product updated"})
@@ -39,7 +39,7 @@ export class ProductsController{
     }
 
     static async deleteProduct(req: Request, res: Response) {
-            let productId = req.params.id
+            const productId = req.params.id
             await new ProductService().deleteProduct(productId)
             res.send({message: "Product deleted"})
         }

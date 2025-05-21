@@ -10,7 +10,7 @@ export class CategoriesController{
 
     static async getById(req: Request, res: Response) {
         
-        let categoryId = req.params.id
+        const categoryId = req.params.id
         res.send(await new CategoryService().getById(categoryId))
     }
 
@@ -26,8 +26,8 @@ export class CategoriesController{
 
     static async updateCategory(req: Request, res: Response) {
         
-        let categoryId = req.params.id
-        let category = req.body as Category
+        const categoryId = req.params.id
+        const category = req.body as Category
         await new CategoryService().updateCategory(categoryId, category)
 
         res.send({message: "Category updated"})
@@ -35,7 +35,7 @@ export class CategoriesController{
     }
 
     static async deleteCategory(req: Request, res: Response) {
-        let categoryId = req.params.id
+        const categoryId = req.params.id
         await new CategoryService().deleteCategory(categoryId)
         res.send({message: "Category deleted"})
     }
